@@ -50,14 +50,21 @@ function resetForm(){
     document.getElementById("lname").value = ""
     document.getElementById("email").value = ""
 }
-function addStudent(){
+
+// helper function to get form data
+function getFormData(){
     // create js object to store form data
-    var data = {
+      var formData = {
         stdid : parseInt(document.getElementById("sid").value),
         fname : document.getElementById("fname").value,
         lname : document.getElementById("lname").value,
         email : document.getElementById("email").value
     }
+    return formData
+}
+
+function addStudent(){
+    data = formData()
     // form validation
 
     var sid = data.stdid
@@ -90,16 +97,69 @@ function addStudent(){
     resetForm()
 }
 
+function updateAPIRequest(oldSid){
+    // get the updated data from user 
+    newData = getFormData()
+    // call update api
+    fetch("/student/"+oldSid, {
+        method: "PUT",
+        body: JSON.stringify(newData),
+        headers: {"Content-type": "application/json; charset=UTF-8"}
+    }).then(res => {
+        if(res.ok){
+            selectedRow.cells[0].innerHTML = newData.stdid
+            selectedRow.cells[1].innerHTML = newData.fname
+            selectedRow.cells[2].innerHTML = newData.lname
+            selectedRow.cells[3].innerHTML = newData.email
+
+            // change button value to initiual state
+            var btn = document.getElementById("button-add")
+            btn.innerHTML = "Add"
+            btn.setAttribute("onclick", "addStudent()")
+
+            selectedRow = null
+            resetForm()
+        }else{
+            alert("server: update request error")
+        }
+    })
+
+}
+
+var selectedRow = null
+
 function updateStudent(input){
     // get the selected row
-    var selectedRow = input.parentElement.parentElement
+    selectedRow = input.parentElement.parentElement
     document.getElementById("sid").value = selectedRow.cells[0].innerHTML
     document.getElementById("fname").value = selectedRow.cells[1].innerHTML
     document.getElementById("lname").value = selectedRow.cells[2].innerHTML
     document.getElementById("email").value = selectedRow.cells[3].innerHTML
 
+    sid = selectedRow.cells[0].innerHTML
+
     // change button value to update
     var btn = document.getElementById("button-add")
     btn.innerHTML = "Update"
     btn.setAttribute("onclick", "updateAPIRequest(sid)")
+}
+
+function deleteStudent(input){
+    if(confirm("Are you sure to delete this?")){
+        selectedRow = input.parentElement.parentElement
+        sid = selectedRow.cells[0].innerHTML
+        fetch("/student/"+sid, {
+            method: "DELETE"
+        })
+        .then(res => {
+            if(res.ok){
+                var rowIndex = selectedRow.rowIndex
+                document.getElementById("myTable").deleteRow(rowIndex)
+                alert("student deleted successfully")
+                selectedRow = null
+            }else{
+                alert("server: delete request error")
+            }
+        })
+    }
 }
