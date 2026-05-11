@@ -93,7 +93,16 @@ function addStudent(){
         }else{
             throw new Error(response1.statusText)
         }
-    }).catch(e => alert(e));
+    }).catch(e => {
+        if (e.message == 401){
+            alert("User not not loged in")
+            window.open("index.html", "_self")
+        } else if (e.message = 400){
+            alert("Bad Request")
+        }else{
+            alert("Internal server error")
+        }
+    } );
     resetForm()
 }
 

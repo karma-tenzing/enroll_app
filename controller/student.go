@@ -12,6 +12,9 @@ import (
 )
 
 func AddStudent(w http.ResponseWriter, r *http.Request) {
+	if !VerifyCookie(w, r) {
+		return
+	}
 	// create the variable of type student to store student info
 	var stud model.Student
 
@@ -53,6 +56,10 @@ func GetUserID(userID string) (int64, error) {
 }
 
 func GetStudent(w http.ResponseWriter, r *http.Request) {
+	if !VerifyCookie(w, r) {
+		return
+	}
+
 	myMap := mux.Vars(r)
 	stdid := myMap["sid"]
 	stdID, idErr := GetUserID((stdid))
@@ -82,6 +89,9 @@ func GetStudent(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateStudent(w http.ResponseWriter, r *http.Request) {
+	if !VerifyCookie(w, r) {
+		return
+	}
 	old_Sid := mux.Vars(r)["sid"]
 	old_StdId, idErr := getUserId(old_Sid)
 	if idErr != nil {
@@ -110,6 +120,9 @@ func UpdateStudent(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteStudent(w http.ResponseWriter, r *http.Request) {
+	if !VerifyCookie(w, r) {
+		return
+	}
 	sid := mux.Vars(r)["sid"]
 	stdID, idErr := getUserId(sid)
 	if idErr != nil {
@@ -139,7 +152,8 @@ func GetAllStudent(w http.ResponseWriter, r *http.Request) {
 	students, getErr := model.GetAllStudents()
 	if getErr != nil {
 		httpResp.ResponseWithError(w, http.StatusInternalServerError, getErr.Error())
-		return
+	} else {
+		httpResp.ResponseWithJSON(w, http.StatusOK, students)
 	}
-	httpResp.ResponseWithJSON(w, http.StatusOK, students)
+
 }

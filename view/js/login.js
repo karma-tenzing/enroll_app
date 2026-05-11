@@ -1,7 +1,7 @@
 function login(){
     var loginData = {
-        email = document.getElementById("email").value,
-        password = document.getElementById("pw").value
+        email : document.getElementById("email").value,
+        password : document.getElementById("pw").value
     }
     fetch("/login",{
         method: "POST",
@@ -14,4 +14,15 @@ function login(){
             throw new Error(response.statusText)
         }
     }).catch(e => alert(e));
+}
+
+function logout(){
+    fetch("/logout")
+    .then(response => {
+        if(response.ok){
+            window.open("index.html", "_self")
+        }else{
+            throw new Error(response.statusText)
+        }
+    }).catch(e => alert(e))
 }

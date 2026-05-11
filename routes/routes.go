@@ -30,6 +30,11 @@ func InitializeRoutes() {
 	router.HandleFunc("/course/{cid}", controller.UpdateCourse).Methods("PUT")
 	router.HandleFunc("/course/{cid}", controller.DeleteCourse).Methods("DELETE")
 
+	// sign up and login
+	router.HandleFunc("/signup", controller.SignUp).Methods("POST")
+	router.HandleFunc("/login", controller.Login).Methods("POST")
+	router.HandleFunc("/logout", controller.Logout)
+
 	// load static files
 	fhandler := http.FileServer(http.Dir("./view"))
 	//serve static files as a route by registering all stattic files in mux router

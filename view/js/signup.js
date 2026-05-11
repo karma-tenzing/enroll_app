@@ -1,11 +1,11 @@
 function signUp(){
     // get form data   
     var signUpData = {
-        firstname = document.getElementById("fname").value,
-        lastname = document.getElementById("lname").value,
-        email = document.getElementById("email").value,
-        password = document.getElementById("pw1").value,
-        pw = document.getElementById("pw2").value
+        firstname : document.getElementById("fname").value,
+        lastname : document.getElementById("lname").value,
+        email : document.getElementById("email").value,
+        password : document.getElementById("pw1").value,
+        pw : document.getElementById("pw2").value
     }
     if(signUpData.password !== signUpData.pw){
         alert("Password doesnot match ")
