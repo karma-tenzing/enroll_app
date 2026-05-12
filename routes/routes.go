@@ -35,6 +35,9 @@ func InitializeRoutes() {
 	router.HandleFunc("/login", controller.Login).Methods("POST")
 	router.HandleFunc("/logout", controller.Logout)
 
+	// enroll api
+	router.HandleFunc("/enroll", controller.Enroll).Methods("POST")
+
 	// load static files
 	fhandler := http.FileServer(http.Dir("./view"))
 	//serve static files as a route by registering all stattic files in mux router
